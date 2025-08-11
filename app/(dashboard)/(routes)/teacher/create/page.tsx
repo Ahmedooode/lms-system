@@ -40,16 +40,16 @@ const CreatePage = () => {
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
     try {
       const response = await axios.post("/api/courses", values);
-      router.push(`/teacher/course/${response.data.id}`);
+      router.push(`/teacher/courses/${response.data.id}`);
       toast.success("Course created");
     } catch {
-      toast.error("some went wrong");
+      toast.error("Something went wrong");
     }
   };
   return (
     <div className="max-w-5xl mx-auto flex md:items-center md:justify-center h-full p-6">
       <div>
-        <h1 className="text-2xl">Name your cource</h1>
+        <h1 className="text-2xl">Name your course</h1>
         <p className="text-sm text-slate-600">
           what would you like to name your course? Don&apos;t worry , you can
           change this later.{" "}
@@ -81,15 +81,13 @@ const CreatePage = () => {
             />
             <div className="flex items-center gap-x-2">
               <Link href="/">
-                <Button
-                  type="button"
-                  variant="ghost"
-                  disabled={!isValid || isSubmitting}
-                >
+                <Button type="button" variant="ghost">
                   Cancel
                 </Button>
               </Link>
-              <Button type="submit">Continue</Button>
+              <Button type="submit" disabled={!isValid || isSubmitting}>
+                Continue
+              </Button>
             </div>
           </form>
         </Form>
