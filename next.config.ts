@@ -1,9 +1,9 @@
-import type { NextConfig } from "next";
+/** @type {import('next').NextConfig} */
 
-const nextConfig: NextConfig = {
+const nextConfig = {
   images: {
     domains: ["utfs.io"],
   },
 };
 
-export default nextConfig;
+module.exports = nextConfig;
