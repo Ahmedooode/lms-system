@@ -1,3 +1,5 @@
+// try fo solve the upload of course image
+
 import { clerkMiddleware, createRouteMatcher } from "@clerk/nextjs/server";
 
 const isProtectedRoute = createRouteMatcher([
@@ -6,7 +8,19 @@ const isProtectedRoute = createRouteMatcher([
 ]);
 
 export default clerkMiddleware(async (auth, req) => {
-  if (isProtectedRoute(req)) await auth.protect();
+  const { nextUrl } = req;
+
+  // Skip authentication for API routes that handle their own auth
+  if (
+    nextUrl.pathname.startsWith("/api/uploadthing") ||
+    nextUrl.pathname.startsWith("/api/groups")
+  ) {
+    return;
+  }
+
+  if (isProtectedRoute(req)) {
+    await auth.protect();
+  }
 });
 
 export const config = {
