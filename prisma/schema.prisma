@@ -109,7 +109,7 @@ model Purchase {
   course Course @relation(fields: [courseId], references: [id], onDelete: Cascade)
 
   createdAt DateTime @default(now())
-  updateAt DateTime @updatedAt()
+  updatedAt DateTime @updatedAt()
 
   @@unique([userId, courseId])
   @@index([courseId])
