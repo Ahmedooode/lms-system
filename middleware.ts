@@ -31,3 +31,8 @@ export const config = {
     "/(api|trpc)(.*)",
   ],
 };
+
+// this for stripe authentication
+// export default authMiddleware({
+//   publicRoute: ["api/webhook"],
+// });
