@@ -1,44 +1,48 @@
-import Stripe from "stripe";
-import {headers} from "next/headers";
-import { NextResponse } from "next/server";
+// import Stripe from "stripe";
+// import { headers } from "next/headers";
+// import { NextResponse } from "next/server";
 
-import {Stripe} from "@/lib/stripe";
-import {db} from "@/lib/db";
+// import { Stripe } from "@/lib/stripe";
+// import { db } from "@/lib/db";
 
+// export async function POST(req: Request) {
+//   const body = await requestAnimationFrame.text();
+//   const signature = headers().get("Stripe-signature") as string;
 
-export async functuin POST(req: Request){
-    const body = await requestAnimationFrame.text();
-    const signature = headers().get("Stripe-signature") as string;
+//   let event: Stripe.Event;
 
-    let event : Stripe.Event;
+//   try {
+//     event = Stripe.webhooks.constructEvent(
+//       body,
+//       signature,
+//       process.env.STRIPE_WEBHOOK_SECRET
+//     );
+//   } catch (error: any) {
+//     return new NextResponse(`Webhook Error: ${error.message}`, { status: 400 });
+//   }
 
-    try{
-        event = Stripe.webhooks.constructEvent(
-            body,
-            signature,
-            process.env.STRIPE_WEBHOOK_SECRET
-        )
-    } catch(error:any){
-        return new NextResponse(`Webhook Error: ${error.message}`, {status: 400})
-    }
+//   const session = event.data.object as Stripe.Checkout.Session;
+//   const userId = session?.metadata?.userId;
+//   const courseId = session?.metadata?.courseId;
 
-    const session = event.data.object as Stripe.Checkout.Session;
-    const userId = session?.metadata?.userId;
-    const courseId = session?.metadata?.courseId;
+//   if (event.type === "checkout.session.completed") {
+//     if (!userId || !courseId) {
+//       return new NextResponse(`Webhook Error: Missing metadata`, {
+//         status: 400,
+//       });
+//     }
+//     await db.purchase.create({
+//       data: {
+//         courseId: courseId,
+//         userId: userId,
+//       },
+//     });
+//   } else {
+//     return new NextResponse(
+//       `Webhook Error: Unhandled event type ${event.type}`,
+//       { status: 200 }
+//     );
+//   }
 
-    if(event.type === "checkout.session.completed"){
-        if(!userId || !courseId){
-            return new NextResponse(`Webhook Error: Missing metadata`,{status: 400})
-        }
-        await db.purchase.create({
-            data: {
-                courseId: courseId,
-                userId: userId,
-            }
-        })
-    }else{
-        return new NextResponse(`Webhook Error: Unhandled event type ${event.type}`, {status: 200})
-    }
-
-    return NextResponse(null, {status: 200});
-}
+//   return NextResponse(null, { status: 200 });
+// }
