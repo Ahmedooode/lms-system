@@ -22,7 +22,7 @@
 //       },
 //     });
 
-//     const puchase = await db.purchase.findUnique({
+//     const purchase = await db.purchase.findUnique({
 //       where: {
 //         userId_courseId: {
 //           userId: user.id,
