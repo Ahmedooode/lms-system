@@ -114,7 +114,7 @@
 // export default ChapterIdPage;
 
 import { auth } from "@clerk/nextjs/server";
-import { redirect } from "next/navigation"; // better than "next/dist/client..."
+import { redirect } from "next/navigation";
 
 import { getChapter } from "@/actions/get-chapter";
 import { Banner } from "@/components/banner";
@@ -126,11 +126,16 @@ import { Preview } from "@/components/preview";
 import { File } from "lucide-react";
 import { CourseProgressButton } from "./_components/course-progress-button";
 
-const ChapterIdPage = async ({
-  params,
-}: {
-  params: { courseId: string; chapterId: string };
-}) => {
+interface ChapterIdPageProps {
+  params: {
+    courseId: string;
+    chapterId: string;
+  };
+}
+
+const ChapterIdPage = async ({ params }: ChapterIdPageProps) => {
+  const { courseId, chapterId } = params;
+
   const { userId } = await auth();
 
   if (!userId) return redirect("/");
@@ -145,8 +150,8 @@ const ChapterIdPage = async ({
     purchase,
   } = await getChapter({
     userId,
-    chapterId: params.chapterId,
-    courseId: params.courseId,
+    chapterId,
+    courseId,
   });
 
   if (!chapter || !course) {
@@ -169,9 +174,9 @@ const ChapterIdPage = async ({
       )}
       <div className="p-4">
         <VideoPlayer
-          chapterId={params.chapterId}
+          chapterId={chapterId}
           title={chapter.title}
-          courseId={params.courseId}
+          courseId={courseId}
           nextChapterId={nextChapter?.id}
           playbackId={muxData?.playbackId}
           isLocked={isLocked}
@@ -183,21 +188,18 @@ const ChapterIdPage = async ({
           <h2 className="text-2xl font-semibold mb-2">{chapter.title}</h2>
           {purchase ? (
             <CourseProgressButton
-              chapterId={params.chapterId}
-              courseId={params.courseId}
+              chapterId={chapterId}
+              courseId={courseId}
               nextChapterId={nextChapter?.id}
               isCompleted={!!userProgress?.isCompleted}
             />
           ) : (
-            <CourseEnrollButton
-              courseId={params.courseId}
-              price={course.price!}
-            />
+            <CourseEnrollButton courseId={courseId} price={course.price ?? 0} />
           )}
         </div>
         <Separator />
         <div>
-          <Preview value={chapter.description!} />
+          <Preview value={chapter.description ?? ""} />
         </div>
         {!!attachments.length && (
           <>
@@ -208,7 +210,8 @@ const ChapterIdPage = async ({
                   href={attachment.url}
                   key={attachment.id}
                   target="_blank"
-                  className="flex items-center p-3 w-full bg-sky-200 border text-sky-700 rounded-md hover:underline"
+                  rel="noopener noreferrer"
+                  className="flex items-center gap-2 p-3 w-full bg-sky-200 border text-sky-700 rounded-md hover:underline"
                 >
                   <File />
                   <p>{attachment.name}</p>
