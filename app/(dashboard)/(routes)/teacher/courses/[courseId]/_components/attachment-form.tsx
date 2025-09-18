@@ -18,8 +18,20 @@ interface AttachmentFormProps {
   courseId: string;
 }
 
+// const formSchema = z.object({
+//   url: z.string().url("Must be a valid URL"),
+//   name: z.string().min(1, "Name is required"),
+// });
+
+// const formSchema = z.object({
+//   url: z.string().min(1),
+//   name: z.string(),
+// });
+
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 const formSchema = z.object({
   url: z.string().min(1),
+  name: z.string(),
 });
 
 export const AttachmentForm = ({
@@ -108,14 +120,25 @@ export const AttachmentForm = ({
       )}
       {isEditing && (
         <div>
-          <FileUpload
+          {/* <FileUpload
             endpoint="courseAttachment"
             onChange={(url) => {
               if (url) {
                 onSubmit({ url: url });
               }
             }}
+          /> */}
+
+          <FileUpload
+            endpoint="courseAttachment"
+            onChange={(url) => {
+              if (url) {
+                const name = url.split("/").pop() ?? "Attachment";
+                onSubmit({ url, name });
+              }
+            }}
           />
+
           <div className="text-xs text-muted-foreground mt-4">
             Add anything your students might need to complete the course.
           </div>

@@ -21,17 +21,13 @@ import { useRouter } from "next/navigation";
 import { cn } from "@/lib/utils";
 import { Chapter } from "@prisma/client";
 
-import { Preview } from "@/components/preview";
+// import { Preview } from "@/components/preview";
 import { Checkbox } from "@/components/ui/checkbox";
 interface ChapterAccessFormProps {
   initialData: Chapter;
   courseId: string;
   chapterId: string;
 }
-
-const formSchema = z.object({
-  isFree: z.boolean().default(false),
-});
 
 export const ChapterAccessForm = ({
   initialData,
@@ -44,9 +40,17 @@ export const ChapterAccessForm = ({
 
   const router = useRouter();
 
-  const form = useForm<z.infer<typeof formSchema>>({
+  const formSchema = z.object({
+    isFree: z.boolean(),
+  });
+
+  type FormSchema = z.infer<typeof formSchema>;
+
+  const form = useForm<FormSchema>({
     resolver: zodResolver(formSchema),
-    defaultValues: { isFree: !!initialData.isFree },
+    defaultValues: {
+      isFree: initialData.isFree ?? false, // RHF default
+    },
   });
 
   const { isSubmitting, isValid } = form.formState;
@@ -108,7 +112,9 @@ export const ChapterAccessForm = ({
                   <FormControl>
                     <Checkbox
                       checked={field.value}
-                      onCheckedChange={field.onChange}
+                      onCheckedChange={(checked) =>
+                        field.onChange(checked === true)
+                      }
                     />
                   </FormControl>
                   <div className="space-y-1 leading-none">
@@ -120,6 +126,7 @@ export const ChapterAccessForm = ({
                 </FormItem>
               )}
             />
+
             <div className="flex items-center gap-x-2">
               <Button disabled={!isValid || isSubmitting} type="submit">
                 Save
