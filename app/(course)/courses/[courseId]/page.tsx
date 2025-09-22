@@ -1,17 +1,19 @@
 import { db } from "@/lib/db";
 import { redirect } from "next/navigation";
 
-const CourseIdPage = async ({ params }: { params: { courseId: string } }) => {
+interface CourseIdPageProps {
+  params: Promise<{ courseId: string }>;
+}
+
+const CourseIdPage = async ({ params }: CourseIdPageProps) => {
+  const { courseId } = await params;
+
   const course = await db.course.findUnique({
-    where: { id: params.courseId },
+    where: { id: courseId },
     include: {
       chapters: {
-        where: {
-          isPublished: true,
-        },
-        orderBy: {
-          position: "asc",
-        },
+        where: { isPublished: true },
+        orderBy: { position: "asc" },
       },
     },
   });

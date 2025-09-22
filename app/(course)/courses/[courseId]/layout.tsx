@@ -6,13 +6,13 @@ import { getProgress } from "@/actions/get-progress";
 import { CourseSidebar } from "./_components/course-sidebar";
 import { CourseNavbar } from "./_components/course-navbar";
 
-const CourseLayout = async ({
-  children,
-  params,
-}: {
+interface CourseLayoutProps {
   children: React.ReactNode;
-  params: { courseId: string };
-}) => {
+  params: Promise<{ courseId: string }>;
+}
+
+const CourseLayout = async ({ children, params }: CourseLayoutProps) => {
+  const { courseId } = await params;
   const { userId } = await auth();
 
   if (!userId) {
@@ -20,24 +20,14 @@ const CourseLayout = async ({
   }
 
   const course = await db.course.findUnique({
-    where: {
-      id: params.courseId,
-    },
+    where: { id: courseId },
     include: {
       chapters: {
-        where: {
-          isPublished: true,
-        },
+        where: { isPublished: true },
         include: {
-          userProgress: {
-            where: {
-              userId,
-            },
-          },
+          userProgress: { where: { userId } },
         },
-        orderBy: {
-          position: "asc",
-        },
+        orderBy: { position: "asc" },
       },
     },
   });

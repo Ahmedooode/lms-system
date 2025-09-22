@@ -7,15 +7,9 @@ import { Categories } from "./_components/categories";
 import { SearchInput } from "@/components/search-input";
 import { CoursesList } from "@/components/courses-list";
 import { getCourses } from "@/actions/get-courses";
+import { PageProps } from "next";
 
-interface SearchPageProps {
-  searchParams: {
-    title: string;
-    categoryId: string;
-  };
-}
-
-const SearchPage = async ({ searchParams }: SearchPageProps) => {
+const SearchPage = async ({ searchParams }: PageProps) => {
   const { userId } = await auth();
 
   if (!userId) {
