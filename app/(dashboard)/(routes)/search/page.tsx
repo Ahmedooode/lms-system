@@ -4,7 +4,6 @@ import { redirect } from "next/navigation";
 import { db } from "@/lib/db";
 import { getCourses } from "@/actions/get-courses";
 import SearchPageClient from "./SearchPageClient";
-import { Suspense } from "react";
 
 const SearchPage = async ({
   searchParams,
@@ -28,11 +27,7 @@ const SearchPage = async ({
     ...searchParams,
   });
 
-  return (
-    <Suspense fallback={<div>Loading search page...</div>}>
-      <SearchPageClient categories={categories} courses={courses} />
-    </Suspense>
-  );
+  return <SearchPageClient categories={categories} courses={courses} />;
 };
 
 export default SearchPage;
