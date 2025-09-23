@@ -18,14 +18,16 @@ export default function SearchPageClient({
   courses,
 }: SearchPageClientProps) {
   return (
-    <Suspense fallback={<div>Loading...</div>}>
+    <>
       <div className="px-6 pt-6 md:hidden md:mb-0 block">
-        <SearchInput />
+        <Suspense fallback={<div>Loading search...</div>}>
+          <SearchInput />
+        </Suspense>
       </div>
       <div className="p-6">
         <Categories items={categories} />
         <CoursesList items={courses} />
       </div>
-    </Suspense>
+    </>
   );
 }
