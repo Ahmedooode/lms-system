@@ -4,17 +4,20 @@ import { redirect } from "next/navigation";
 import { getChapter } from "@/actions/get-chapter";
 import { Banner } from "@/components/banner";
 import { Separator } from "@/components/ui/separator";
-
 import { VideoPlayer } from "./_components/video-player";
 import { CourseEnrollButton } from "./_components/course-enroll-button";
 import { Preview } from "@/components/preview";
 import { File } from "lucide-react";
 import { CourseProgressButton } from "./_components/course-progress-button";
 
-const ChapterIdPage = async (props: unknown) => {
-  const { params } = props as {
-    params: { courseId: string; chapterId: string };
+interface ChapterIdPageProps {
+  params: {
+    courseId: string;
+    chapterId: string;
   };
+}
+
+const ChapterIdPage = async ({ params }: ChapterIdPageProps) => {
   const { courseId, chapterId } = params;
 
   const { userId } = await auth();
