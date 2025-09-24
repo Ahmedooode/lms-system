@@ -11,14 +11,14 @@ import { File } from "lucide-react";
 import { CourseProgressButton } from "./_components/course-progress-button";
 
 type ChapterIdPageProps = {
-  params: {
+  params: Promise<{
     courseId: string;
     chapterId: string;
-  };
+  }>;
 };
 
 const ChapterIdPage = async ({ params }: ChapterIdPageProps) => {
-  const { courseId, chapterId } = params;
+  const { courseId, chapterId } = await params;
 
   const { userId } = await auth();
 
