@@ -7,16 +7,21 @@ import { db } from "@/lib/db";
 import { getCourses } from "@/actions/get-courses";
 import SearchPageClient from "./SearchPageClient";
 
-const SearchPage = async ({
-  searchParams,
-}: {
-  searchParams?: { title?: string; categoryId?: string };
-}) => {
+type SearchPageProps = {
+  searchParams?: Promise<{
+    title?: string;
+    categoryId?: string;
+  }>;
+};
+
+const SearchPage = async ({ searchParams }: SearchPageProps) => {
   const { userId } = await auth();
 
   if (!userId) {
-    return redirect("/");
+    redirect("/");
   }
+
+  const resolvedSearchParams = await searchParams;
 
   const categories = await db.category.findMany({
     orderBy: {
@@ -26,7 +31,7 @@ const SearchPage = async ({
 
   const courses = await getCourses({
     userId,
-    ...searchParams,
+    ...resolvedSearchParams,
   });
 
   return <SearchPageClient categories={categories} courses={courses} />;
