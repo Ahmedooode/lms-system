@@ -1,7 +1,7 @@
 import { Navbar } from "./_components/navbar";
 import { Sidebar } from "./_components/sidebar";
 
-const BashboardLayout = ({ children }: { children: React.ReactNode }) => {
+const DashboardLayout = ({ children }: { children: React.ReactNode }) => {
   return (
     <div className=" h-full">
       <div className="h-[80px] md:pl-56 fixed inset-y-0 w-full z-50">
@@ -15,4 +15,4 @@ const BashboardLayout = ({ children }: { children: React.ReactNode }) => {
   );
 };
 
-export default BashboardLayout;
+export default DashboardLayout;
